@@ -12,6 +12,7 @@ export default {
 					1: "#232022",
 					2: "#302B2E",
 				},
+				cvgray: "#4a4a4a",
 				cvlight: {
 					1: "#FFFFFF",
 					2: "#A0A0A0",
