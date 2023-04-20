@@ -3,6 +3,7 @@ import { getUserInfo } from "../data/queries";
 import { tryLogin } from "../data/mutations";
 import { Navigate } from "react-router-dom";
 import { Button } from "../components/Button";
+import { TbLogin } from "react-icons/tb";
 
 export function AuthPage() {
 	// do login and logout mutations to server
@@ -36,6 +37,7 @@ export function AuthPage() {
 					<p>{JSON.stringify(userInfoQuery.error)}</p>
 					<Button
 						title="Login with Google"
+						icon={<TbLogin />}
 						handleClick={() => loginMutation.mutate()}
 					/>
 				</>
