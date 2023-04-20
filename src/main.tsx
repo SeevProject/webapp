@@ -6,15 +6,19 @@ import {
 	createBrowserRouter,
 	createRoutesFromElements,
 } from "react-router-dom";
-import { Layout } from "./routes/Layout";
-import { AuthPage } from "./routes/AuthPage";
+import { Layout } from "./components/Layout";
+import { AuthPage } from "./pages/AuthPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { MainPage } from "./pages/MainPage";
 
 // set routes for app
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<Layout />}>
+			<Route path="/" element={<MainPage />} />
 			<Route path="auth" element={<AuthPage />} />
+			<Route path="*" element={<NotFoundPage />} />
 		</Route>,
 	),
 );
