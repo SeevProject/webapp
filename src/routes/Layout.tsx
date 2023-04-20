@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { tryLogout } from "../data/mutations";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
 
 export function Layout() {
@@ -9,14 +9,13 @@ export function Layout() {
 	const logoutMutation = useMutation({
 		mutationKey: ["logout"],
 		mutationFn: tryLogout,
-		networkMode: "offlineFirst",
 	});
 
 	// get user info from server
 	const userInfoQuery = useQuery({
 		queryKey: ["userInfo"],
 		queryFn: getUserInfo,
-		networkMode: "offlineFirst",
+		retry: 1,
 	});
 
 	return (

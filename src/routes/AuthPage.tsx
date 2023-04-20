@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
 import { tryLogin } from "../data/mutations";
 import { Navigate } from "react-router-dom";
@@ -8,14 +8,13 @@ export function AuthPage() {
 	const loginMutation = useMutation({
 		mutationKey: ["login"],
 		mutationFn: tryLogin,
-		networkMode: "offlineFirst",
 	});
 
 	// get user info from server
 	const userInfoQuery = useQuery({
 		queryKey: ["userInfo"],
 		queryFn: getUserInfo,
-		networkMode: "offlineFirst",
+		retry: 1,
 	});
 
 	// redirect to home if user is logged in
