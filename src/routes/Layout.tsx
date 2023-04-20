@@ -22,7 +22,7 @@ export function Layout() {
 				<Link to={"/"}>
 					<p className="font-bold">Logo</p>
 				</Link>
-				{getUser()}
+				<Link to={"/auth"}>{getUser()}</Link>
 			</div>
 			{/* Nav end */}
 			<div className="px-24">
