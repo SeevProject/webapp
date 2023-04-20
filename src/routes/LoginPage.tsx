@@ -6,13 +6,32 @@ export function LoginPage() {
 	// get auth state
 	const [user, userLoading] = useAuthState(auth);
 
-	// login the user with google
-	function loginWithGoogle() {
-		signInWithPopup(auth, new GoogleAuthProvider()).then((result) => {
-			result.user.getIdToken().then((token) => {
-				console.log(token);
-			});
+	async function getUsers() {
+		const res = await fetch("http://localhost:3000/users", {
+			credentials: "include",
 		});
+		const data = await res.json();
+		console.log(data);
+	}
+
+	// login the user with google
+	async function loginWithGoogle() {
+		// sign in and get token
+		const { user } = await signInWithPopup(auth, new GoogleAuthProvider());
+		const token = await user.getIdToken();
+
+		// send request to login with token
+		const res = await fetch("http://localhost:3000/auth/login", {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+
+		const data = await res.json();
+
+		// log the response
+		console.log(data);
 	}
 
 	// logout the user
@@ -35,6 +54,7 @@ export function LoginPage() {
 					{user ? "Logout" : "Login"}
 				</button>
 			)}
+			<button onClick={() => getUsers()}>users</button>
 		</div>
 	);
 }
