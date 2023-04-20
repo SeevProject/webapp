@@ -4,10 +4,10 @@ export async function getUserInfo() {
 		credentials: "include",
 	});
 
-	// throw error if request failed
-	if (!res.ok) throw new Error("Failed to get user info");
+	// if not ok, reject with status text
+	if (!res.ok) return Promise.reject(`${res.statusText}`);
 
-	// otherwise return data
 	const data = await res.json();
+
 	return data;
 }

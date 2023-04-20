@@ -15,6 +15,9 @@ export async function tryLogin() {
 		},
 	});
 
+	// if not ok, reject with status text
+	if (!res.ok) return Promise.reject(`${res.statusText}`);
+
 	const data = await res.json();
 	return data;
 }
@@ -28,6 +31,9 @@ export async function tryLogout() {
 		method: "POST",
 		credentials: "include",
 	});
+
+	// if not ok, reject with status text
+	if (!res.ok) return Promise.reject(`${res.statusText}`);
 
 	const data = await res.json();
 	return data;

@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
-import { tryLogout, tryLogin } from "../data/mutations";
+import { tryLogin } from "../data/mutations";
+import { Navigate } from "react-router-dom";
 
 export function AuthPage() {
 	// do login and logout mutations to server
@@ -10,47 +11,32 @@ export function AuthPage() {
 		networkMode: "offlineFirst",
 	});
 
-	const logoutMutation = useMutation({
-		mutationKey: ["logout"],
-		mutationFn: tryLogout,
-		networkMode: "offlineFirst",
-	});
-
 	// get user info from server
 	const userInfoQuery = useQuery({
-		queryKey: ["userInfo", loginMutation.status, logoutMutation.status],
+		queryKey: ["userInfo"],
 		queryFn: getUserInfo,
 		networkMode: "offlineFirst",
 	});
 
+	// redirect to home if user is logged in
+	if (userInfoQuery.isSuccess) return <Navigate replace to={"/"}></Navigate>;
+
 	return (
 		<div className="flex flex-col gap-4">
 			<h1 className="text-xl font-bold">LoginPage</h1>
-			<div>
-				{userInfoQuery.isLoading ? (
-					<p>Loading</p>
-				) : userInfoQuery.isError ? (
-					<>
-						<p>Error: {JSON.stringify(userInfoQuery.error)}</p>
-						<button
-							className="bg-red-800 p-2"
-							onClick={() => loginMutation.mutate()}
-						>
-							Login
-						</button>
-					</>
-				) : (
-					<>
-						<p>UID: {userInfoQuery.data.uid}</p>
-						<button
-							className="bg-red-800 p-2"
-							onClick={() => logoutMutation.mutate()}
-						>
-							Logout
-						</button>
-					</>
-				)}
-			</div>
+
+			{/* on loading */}
+			{userInfoQuery.status === "loading" && (
+				<p className="text-gray-500">Loading</p>
+			)}
+
+			{/* on errors */}
+			{userInfoQuery.status === "error" && (
+				<>
+					<p>{JSON.stringify(userInfoQuery.error)}</p>
+					<button onClick={() => loginMutation.mutate()}>login</button>
+				</>
+			)}
 		</div>
 	);
 }

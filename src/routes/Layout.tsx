@@ -1,19 +1,23 @@
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Outlet } from "react-router-dom";
-import { auth } from "../firebase";
-import { useCallback } from "react";
 import { Link } from "react-router-dom";
+import { tryLogout } from "../data/mutations";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getUserInfo } from "../data/queries";
 
 export function Layout() {
-	// get auth state
-	const [user, loading] = useAuthState(auth);
+	// try to logout
+	const logoutMutation = useMutation({
+		mutationKey: ["logout"],
+		mutationFn: tryLogout,
+		networkMode: "offlineFirst",
+	});
 
-	// get user data or loading or not logged in based on auth
-	const getUser = useCallback(() => {
-		if (loading) return <p>Loading...</p>;
-		if (!user) return <p>Not logged in</p>;
-		return <p className="font-bold">{user.displayName}</p>;
-	}, [loading, user]);
+	// get user info from server
+	const userInfoQuery = useQuery({
+		queryKey: ["userInfo"],
+		queryFn: getUserInfo,
+		networkMode: "offlineFirst",
+	});
 
 	return (
 		<div className="min-w-screen flex min-h-screen flex-col gap-8">
@@ -22,12 +26,30 @@ export function Layout() {
 				<Link to={"/"}>
 					<p className="font-bold">Logo</p>
 				</Link>
-				<Link to={"/auth"}>{getUser()}</Link>
+				<div className="flex flex-row gap-2">
+					{userInfoQuery.isLoading ? (
+						<p>Loading...</p>
+					) : userInfoQuery.data ? (
+						<button
+							className="rounded-lg bg-red-800 p-1"
+							onClick={() => logoutMutation.mutate()}
+						>
+							logout
+						</button>
+					) : (
+						<Link to={"/auth"}>
+							<button className="rounded-lg bg-amber-800 p-1">Login</button>
+						</Link>
+					)}
+				</div>
 			</div>
 			{/* Nav end */}
+
+			{/* Main */}
 			<div className="px-24">
 				<Outlet />
 			</div>
+			{/* Main end */}
 		</div>
 	);
 }
