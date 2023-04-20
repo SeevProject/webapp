@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { tryLogout } from "../data/mutations";
 import { getUserInfo } from "../data/queries";
 import { Link } from "react-router-dom";
+import { Button } from "./Button";
 
 export function Nav() {
 	// try to logout
@@ -26,15 +27,10 @@ export function Nav() {
 				{userInfoQuery.isLoading ? (
 					<p>Loading...</p>
 				) : userInfoQuery.data ? (
-					<button
-						className="rounded-lg bg-red-800 p-1"
-						onClick={() => logoutMutation.mutate()}
-					>
-						logout
-					</button>
+					<Button title="Logout" handleClick={() => logoutMutation.mutate()} />
 				) : (
 					<Link to={"/auth"}>
-						<button className="rounded-lg bg-amber-800 p-1">Login</button>
+						<Button title="Login" handleClick={() => {}} />
 					</Link>
 				)}
 			</div>
