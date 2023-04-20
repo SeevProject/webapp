@@ -23,6 +23,7 @@ export function LoginPage() {
 		// send request to login with token
 		const res = await fetch("http://localhost:3000/auth/login", {
 			method: "POST",
+			credentials: "include",
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
