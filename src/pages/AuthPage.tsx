@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
-import { tryLogin } from "../data/mutations";
+import { tryLogin, tryRegister } from "../data/mutations";
 import { Navigate } from "react-router-dom";
 import { Button } from "../components/Button";
 import { TbLogin } from "react-icons/tb";
@@ -10,6 +10,11 @@ export function AuthPage() {
 	const loginMutation = useMutation({
 		mutationKey: ["login"],
 		mutationFn: tryLogin,
+	});
+
+	const registerMutation = useMutation({
+		mutationKey: ["register"],
+		mutationFn: tryRegister,
 	});
 
 	// get user info from server
@@ -35,6 +40,11 @@ export function AuthPage() {
 			{userInfoQuery.status === "error" && (
 				<>
 					<p>{JSON.stringify(userInfoQuery.error)}</p>
+					<Button
+						title="register"
+						icon={<TbLogin />}
+						handleClick={() => registerMutation.mutate()}
+					/>
 					<Button
 						title="Login with Google"
 						icon={<TbLogin />}
