@@ -1,14 +1,17 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Nav } from "./Nav";
+import AdminNav from "../components/AdminNav";
 
 export function Layout() {
-	return (
-		<div className="min-w-screen flex min-h-screen flex-col gap-8">
-			<Nav />
+  const location = useLocation();
 
-			<div className="grow px-24">
-				<Outlet />
-			</div>
-		</div>
-	);
+  return (
+    <div className="min-w-screen flex min-h-screen flex-col gap-8">
+      {location.pathname === "/admin" ? <AdminNav /> : <Nav />}
+
+      <div className="grow px-24">
+        <Outlet />
+      </div>
+    </div>
+  );
 }
