@@ -4,11 +4,11 @@ export default {
 	theme: {
 		colors: {
 			// accent colours
-			accentHighlight: "#FC991C",
-			accentFocus: "#1C7FFC",
+			accentPrimary: "#1C7FFC",
+			accentSecondary: "#FC991C",
 
 			// light theme colours
-			background: "#FFFFFF",
+			background: "#FAFAFA",
 			box: "#EBEBEB",
 			border: "#C3C3C3",
 			textAlt: "#676767",

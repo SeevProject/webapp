@@ -6,7 +6,7 @@ export function Button(props: {
 	return (
 		<button
 			onClick={props.handleClick}
-			className="border-transparent flex flex-row items-center justify-center gap-2 rounded-md border-2 bg-accentHighlight px-2 py-1 font-bold text-bg transition-colors focus:outline-none active:border-accentFocus active:outline-none"
+			className="flex flex-row items-center justify-center gap-2 rounded-md bg-accentPrimary px-2 py-1 font-bold transition-colors hover:bg-accentPrimary/70 focus:outline-none"
 		>
 			{props.title && <p>{props.title}</p>}
 			{props.icon}
