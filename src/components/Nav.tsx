@@ -24,7 +24,7 @@ export function Nav() {
 
   return (
     <div>
-      {location.pathname === "/admin" ? (
+      {location.pathname.startsWith("/admin") ? (
         <div className="flex w-full flex-row justify-between gap-4 px-24 pt-8">
           <Link to={"/"}>
             <p className="font-bold">Logo</p>
@@ -40,6 +40,7 @@ export function Nav() {
               className="!important rounded-3xl hover:bg-accentPrimary"
               handleClick={() => {
                 setActiveButton("templates");
+                navigate("/admin/templates");
                 {
                   /* Go to these route if button is active */
                 }
@@ -58,7 +59,7 @@ export function Nav() {
               className="!important rounded-3xl hover:bg-accentPrimary"
               handleClick={() => {
                 setActiveButton("companies");
-                navigate("/");
+                navigate("/admin/companies");
               }}
             />
 
@@ -71,6 +72,7 @@ export function Nav() {
               className="!important rounded-3xl hover:bg-accentPrimary"
               handleClick={() => {
                 setActiveButton("users");
+                navigate("/admin/users");
               }}
               title="Users"
             />

@@ -12,13 +12,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { MainPage } from "./pages/MainPage";
 import { AdminPage } from "./pages/AdminPage";
-
+import AdminTemplate from "./pages/AdminTemplate";
+import AdminCompanie from "./pages/AdminCompanie";
+import AdminUser from "./pages/AdminUser";
 // set routes for app
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route path="/" element={<MainPage />} />
       <Route path="admin" element={<AdminPage />} />
+      <Route path="admin/templates" element={<AdminTemplate />} />
+      <Route path="admin/companies" element={<AdminCompanie />} />
+      <Route path="admin/users" element={<AdminUser />} />
       <Route path="auth" element={<AuthPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>
