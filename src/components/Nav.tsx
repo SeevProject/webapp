@@ -24,57 +24,53 @@ export function Nav() {
 
 	return (
 		<div>
-			{location.pathname.startsWith("/admin") ? ( // Every route start with admin run this code
+			{location.pathname.startsWith("/admin") ? ( // This code runs for every route that starts with "/admin"
 				<div className="flex w-full flex-row justify-between gap-4 px-24 pt-8">
 					<Link to={"/"}>
 						<p className="font-bold">Logo</p>
 					</Link>
+					{/* Three buttons inside the admin route */}
 					<div className=" flex flex-row rounded-full border border-border bg-box ">
 						<Button
-							className={`!important rounded-full px-4 py-1.5 hover:bg-accentPrimary hover:text-background ${
+							className={`!rounded-l-full !rounded-r-none px-4 py-1.5 hover:bg-accentPrimary hover:text-background ${
 								activeButton === "templates"
 									? "bg-accentPrimary text-background"
 									: "bg-box text-text"
-							}`}
+							}`} // If the template button is active, add specific styles; otherwise, add different styles
 							handleClick={() => {
-								setActiveButton("templates");
-								navigate("/admin/templates");
-								{
-									/* Go to these route if button is active */
-								}
+								setActiveButton("templates"); // Set the template button as active when clicked
+								navigate("/admin/templates"); // Go to this route when the button is active
 							}}
-							title="Templates"
+							title="Templates" // Button button
 						/>
 
-						<Button
+						<Button // This is the second button. It has the same functionality as the first button, but with a different style for the radius.
 							title="Companies"
-							className={`!important rounded-full  px-4 py-1.5 hover:bg-accentPrimary hover:text-background ${
+							className={`!rounded-none  px-4 py-1.5 hover:bg-accentPrimary hover:text-background ${
 								activeButton === "companies"
 									? "bg-accentPrimary text-background"
 									: "bg-box text-text"
 							}`}
 							handleClick={() => {
-								setActiveButton("companies");
-								navigate("/admin/companies");
+								setActiveButton("companies"); // Set the template button as active when clicked
+								navigate("/admin/companies"); // Go to this route when the button is active
 							}}
 						/>
-
-						<Button
-							className={`!important rounded-full  px-4 py-1.5 hover:bg-accentPrimary hover:text-background ${
+						<Button // This is the third button. It has the same functionality as the first and second button, but with a different style for the radius.
+							className={`!rounded-l-none !rounded-r-full px-4 py-1.5 hover:bg-accentPrimary hover:text-background ${
 								activeButton === "users"
 									? "bg-accentPrimary text-background"
 									: "bg-box text-text"
 							}`}
 							handleClick={() => {
-								setActiveButton("users");
-								navigate("/admin/users");
+								setActiveButton("users"); // Set the template button as active when clicked
+								navigate("/admin/users"); // Go to this route when the button is active
 							}}
 							title="Users"
 						/>
 					</div>
-
 					<div className="flex flex-row gap-2">
-						<Button handleClick={() => {}} title="Profile Icon" />
+						<Button handleClick={() => {}} title="Profile Icon" /> 
 					</div>
 				</div>
 			) : (
