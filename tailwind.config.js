@@ -13,6 +13,8 @@ export default {
 			border: "#C3C3C3",
 			textAlt: "#676767",
 			text: "#232022",
+
+			transparent: "#00000000",
 		},
 	},
 	plugins: [require("prettier-plugin-tailwindcss")],
