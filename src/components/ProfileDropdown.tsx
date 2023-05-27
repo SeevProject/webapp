@@ -6,10 +6,6 @@ import { useMutation } from "@tanstack/react-query";
 import { Button } from "./Button";
 import { ProfileDropdownItem } from "./ProfileDropdownItem";
 
-function classNames(...classes) {
-	return classes.filter(Boolean).join(" ");
-}
-
 export default function ProfileDropdown(props: { notLoggedIn?: boolean }) {
 	// try to logout
 	const logoutMutation = useMutation({
