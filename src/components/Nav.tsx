@@ -22,11 +22,13 @@ export function Nav() {
 				</Link>
 
 				{/* Navigation Center */}
-				<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
-					<NavCenterItem title="Templates" navigateTo="/admin/templates" />
-					<NavCenterItem title="Companies" navigateTo="/admin/companies" />
-					<NavCenterItem title="Users" navigateTo="/admin/users" />
-				</div>
+				{userInfoQuery.data && (
+					<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
+						<NavCenterItem title="Templates" navigateTo="/admin/templates" />
+						<NavCenterItem title="Companies" navigateTo="/admin/companies" />
+						<NavCenterItem title="Users" navigateTo="/admin/users" />
+					</div>
+				)}
 
 				{/* Dropdown for profile */}
 				{userInfoQuery.isLoading ? (
