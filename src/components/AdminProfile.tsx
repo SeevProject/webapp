@@ -1,10 +1,6 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import {
-	UserCircleIcon,
-	Cog6ToothIcon,
-	ArrowRightOnRectangleIcon,
-} from "@heroicons/react/24/outline";
+import { HiUserCircle, HiCog, HiArrowRight } from "react-icons/hi";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
@@ -24,7 +20,7 @@ export default function Example() {
 			>
 				{/* Fix  color and hover amd item hover and make center*/}
 				<Menu.Button className="ring-gray-300 inline-flex items-center justify-center rounded-[0.6rem] bg-accentPrimary px-[0.65rem] py-2 text-sm font-semibold ring-inset">
-					<UserCircleIcon className="h-7 w-7" />
+					<HiUserCircle className="h-7 w-7" />
 				</Menu.Button>
 			</div>
 
@@ -48,7 +44,7 @@ export default function Example() {
 										"block px-4 py-2 text-sm hover:opacity-70",
 									)}
 								>
-									<Cog6ToothIcon className="text-gray-500 mr-2 inline h-5 w-5" />
+									<HiCog className="text-gray-500 mr-2 inline h-5 w-5" />
 									Settings
 								</a>
 							)}
@@ -64,7 +60,7 @@ export default function Example() {
 											"block w-full px-4 py-2 text-left text-sm hover:opacity-70",
 										)}
 									>
-										<ArrowRightOnRectangleIcon className="text-gray-500 mr-2 inline h-5 w-5" />
+										<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
 										Logout
 									</button>
 								)}
