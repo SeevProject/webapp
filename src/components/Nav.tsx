@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProfileDropdown from "./ProfileDropdown";
 import { AiOutlineLoading } from "react-icons/ai";
 
 export function Nav() {
-	const [activeButton, setActiveButton] = useState("templates");
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// get user info from server
 	const userInfoQuery = useQuery({
@@ -28,42 +28,33 @@ export function Nav() {
 				<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
 					<button
 						className={`rounded-[10rem] px-4 py-1.5 ${
-							activeButton === "templates"
+							location.pathname.includes("templates")
 								? "bg-accentPrimary text-background"
 								: "bg-box text-text"
 						}`} // If the template button is active, add specific styles; otherwise, add different styles
-						onClick={() => {
-							setActiveButton("templates"); // Set the template button as active when clicked
-							navigate("/admin/templates"); // Go to this route when the button is active
-						}}
+						onClick={() => navigate("/admin/templates")}
 					>
 						Templates
 					</button>
 
 					<button
 						className={`rounded-[10rem] px-4 py-1.5 ${
-							activeButton === "companies"
+							location.pathname.includes("companies")
 								? "bg-accentPrimary text-background"
 								: "bg-box text-text"
 						}`}
-						onClick={() => {
-							setActiveButton("companies"); // Set the template button as active when clicked
-							navigate("/admin/companies"); // Go to this route when the button is active
-						}}
+						onClick={() => navigate("/admin/companies")}
 					>
 						Companies
 					</button>
 
 					<button
 						className={`rounded-[10rem] px-4 py-1.5 ${
-							activeButton === "users"
+							location.pathname.includes("users")
 								? "bg-accentPrimary text-background"
 								: "bg-box text-text"
 						}`}
-						onClick={() => {
-							setActiveButton("users"); // Set the template button as active when clicked
-							navigate("/admin/users"); // Go to this route when the button is active
-						}}
+						onClick={() => navigate("/admin/users")}
 					>
 						Users
 					</button>
