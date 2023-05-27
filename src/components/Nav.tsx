@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "./Button";
 import { useState } from "react";
 import ProfileDropdown from "./ProfileDropdown";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -28,7 +27,7 @@ export function Nav() {
 				{/* Three buttons inside the admin route */}
 				<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
 					<button
-						className={`rounded-[10rem] px-4 py-2 ${
+						className={`rounded-[10rem] px-4 py-1.5 ${
 							activeButton === "templates"
 								? "bg-accentPrimary text-background"
 								: "bg-box text-text"
@@ -42,7 +41,7 @@ export function Nav() {
 					</button>
 
 					<button
-						className={`rounded-[10rem] px-4 py-2 ${
+						className={`rounded-[10rem] px-4 py-1.5 ${
 							activeButton === "companies"
 								? "bg-accentPrimary text-background"
 								: "bg-box text-text"
@@ -56,7 +55,7 @@ export function Nav() {
 					</button>
 
 					<button
-						className={`rounded-[10rem] px-4 py-2 ${
+						className={`rounded-[10rem] px-4 py-1.5 ${
 							activeButton === "users"
 								? "bg-accentPrimary text-background"
 								: "bg-box text-text"
