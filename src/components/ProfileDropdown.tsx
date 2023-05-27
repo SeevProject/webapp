@@ -3,12 +3,13 @@ import { Menu, Transition } from "@headlessui/react";
 import { HiUserCircle, HiCog, HiArrowRight } from "react-icons/hi";
 import { tryLogout } from "../data/mutations";
 import { useMutation } from "@tanstack/react-query";
+import { Button } from "./Button";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-export default function ProfileDropdown() {
+export default function ProfileDropdown(props: { notLoggedIn?: boolean }) {
 	// try to logout
 	const logoutMutation = useMutation({
 		mutationKey: ["logout"],
@@ -22,8 +23,11 @@ export default function ProfileDropdown() {
 		>
 			<div className="text-white outline-none">
 				{/* Fix  color and hover amd item hover and make center*/}
-				<Menu.Button className="ring-gray-300 inline-flex items-center justify-center rounded-[0.6rem] bg-accentPrimary px-[0.65rem] py-2 text-sm font-semibold ring-inset">
-					<HiUserCircle className="h-7 w-7" />
+				<Menu.Button>
+					<Button
+						handleClick={() => {}}
+						icon={<HiUserCircle className="h-7 w-7" />}
+					></Button>
 				</Menu.Button>
 			</div>
 
@@ -37,38 +41,47 @@ export default function ProfileDropdown() {
 				leaveTo="transform opacity-0 scale-95"
 			>
 				<Menu.Items className="ring-black absolute right-[-2.4rem]  mt-2 w-[8rem] origin-top-right rounded-lg border border-border bg-box shadow-lg ring-opacity-5 focus:outline-none ">
-					<div className="py-1">
+					{/* if the user is not logged in */}
+					{props.notLoggedIn ? (
 						<Menu.Item>
-							{({ active }) => (
-								<a
-									href="#"
-									className={classNames(
-										active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-										"block px-4 py-2 text-sm hover:opacity-70",
-									)}
-								>
-									<HiCog className="text-gray-500 mr-2 inline h-5 w-5" />
-									Settings
-								</a>
-							)}
+							<p>You're not logged in</p>
 						</Menu.Item>
-						<Menu.Item>
-							{({ active }) => (
-								<button
-									onClick={() => {
-										logoutMutation.mutate();
-									}}
-									className={classNames(
-										active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-										"block w-full px-4 py-2 text-left text-sm hover:opacity-70",
-									)}
-								>
-									<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
-									Logout
-								</button>
-							)}
-						</Menu.Item>
-					</div>
+					) : (
+						// if the user is logged in
+						<>
+							<Menu.Item>
+								{({ active }) => (
+									<a
+										href="#"
+										className={classNames(
+											active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+											"block px-4 py-2 text-sm hover:opacity-70",
+										)}
+									>
+										<HiCog className="text-gray-500 mr-2 inline h-5 w-5" />
+										Settings
+									</a>
+								)}
+							</Menu.Item>
+							<Menu.Item>
+								{({ active }) => (
+									<button
+										onClick={() => {
+											logoutMutation.mutate();
+										}}
+										className={classNames(
+											active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+											"block w-full px-4 py-2 text-left text-sm hover:opacity-70",
+										)}
+									>
+										<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
+										Logout
+									</button>
+								)}
+							</Menu.Item>
+						</>
+						// if the user is logged in end
+					)}
 				</Menu.Items>
 			</Transition>
 		</Menu>

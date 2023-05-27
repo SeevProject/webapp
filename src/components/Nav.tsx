@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./Button";
 import { useState } from "react";
 import ProfileDropdown from "./ProfileDropdown";
+import { AiOutlineLoading } from "react-icons/ai";
 
 export function Nav() {
 	const [activeButton, setActiveButton] = useState("templates");
@@ -65,15 +66,14 @@ export function Nav() {
 				</div>
 				{/* Three buttons inside the admin route End */}
 
-				<div className="flex flex-row gap-2">
-					{userInfoQuery.isLoading ? (
-						<p>Loading...</p>
-					) : !userInfoQuery.data ? (
-						<p>Not Logged In</p>
-					) : (
-						<ProfileDropdown />
-					)}
-				</div>
+				{/* The dropdown */}
+				{userInfoQuery.isLoading ? (
+					<AiOutlineLoading className="h-8 w-8 animate-spin" />
+				) : !userInfoQuery.data ? (
+					<ProfileDropdown notLoggedIn />
+				) : (
+					<ProfileDropdown />
+				)}
 			</div>
 		</div>
 	);
