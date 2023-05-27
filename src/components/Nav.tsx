@@ -4,6 +4,7 @@ import { getUserInfo } from "../data/queries";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./Button";
 import { useState } from "react";
+import AdminProfile from './AdminProfile'
 
 export function Nav() {
 	const location = useLocation();
@@ -70,7 +71,7 @@ export function Nav() {
 						/>
 					</div>
 					<div className="flex flex-row gap-2">
-						<Button handleClick={() => {}} title="Profile Icon" /> 
+						<AdminProfile />
 					</div>
 				</div>
 			) : (
