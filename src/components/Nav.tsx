@@ -1,15 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import ProfileDropdown from "./ProfileDropdown";
 import { AiOutlineLoading } from "react-icons/ai";
 import { NavCenterItem } from "./NavCenterItem";
 
 export function Nav() {
-	const navigate = useNavigate();
-	const location = useLocation();
-
 	// get user info from server
 	const userInfoQuery = useQuery({
 		queryKey: ["userInfo"],
