@@ -49,23 +49,19 @@ export default function ProfileDropdown() {
 								</a>
 							)}
 						</Menu.Item>
-
-						<form method="POST" action="/admin">
-							<Menu.Item>
-								{({ active }) => (
-									<button
-										type="submit"
-										className={classNames(
-											active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-											"block w-full px-4 py-2 text-left text-sm hover:opacity-70",
-										)}
-									>
-										<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
-										Logout
-									</button>
-								)}
-							</Menu.Item>
-						</form>
+						<Menu.Item>
+							{({ active }) => (
+								<button
+									className={classNames(
+										active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+										"block w-full px-4 py-2 text-left text-sm hover:opacity-70",
+									)}
+								>
+									<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
+									Logout
+								</button>
+							)}
+						</Menu.Item>
 					</div>
 				</Menu.Items>
 			</Transition>
