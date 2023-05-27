@@ -1,20 +1,13 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { tryLogout } from "../data/mutations";
+import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./Button";
 import { useState } from "react";
 import ProfileDropdown from "./ProfileDropdown";
 
 export function Nav() {
-	const location = useLocation();
 	const [activeButton, setActiveButton] = useState("templates");
 	const navigate = useNavigate();
-	// try to logout
-	const logoutMutation = useMutation({
-		mutationKey: ["logout"],
-		mutationFn: tryLogout,
-	});
 
 	// get user info from server
 	const userInfoQuery = useQuery({
@@ -29,6 +22,7 @@ export function Nav() {
 				<Link to={"/"}>
 					<p className="font-bold">Logo</p>
 				</Link>
+
 				{/* Three buttons inside the admin route */}
 				<div className=" flex flex-row rounded-full border border-border bg-box ">
 					<Button
@@ -69,8 +63,16 @@ export function Nav() {
 						title="Users"
 					/>
 				</div>
+				{/* Three buttons inside the admin route End */}
+
 				<div className="flex flex-row gap-2">
-					<ProfileDropdown />
+					{userInfoQuery.isLoading ? (
+						<p>Loading...</p>
+					) : !userInfoQuery.data ? (
+						<p>Not Logged In</p>
+					) : (
+						<ProfileDropdown />
+					)}
 				</div>
 			</div>
 		</div>

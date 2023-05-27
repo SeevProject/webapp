@@ -1,23 +1,26 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { HiUserCircle, HiCog, HiArrowRight } from "react-icons/hi";
+import { tryLogout } from "../data/mutations";
+import { useMutation } from "@tanstack/react-query";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
 export default function ProfileDropdown() {
+	// try to logout
+	const logoutMutation = useMutation({
+		mutationKey: ["logout"],
+		mutationFn: tryLogout,
+	});
+
 	return (
 		<Menu
 			as="div"
 			className="relative inline-block text-left focus:outline-none"
 		>
-			<div
-				style={{
-					outline: "none",
-					color: "white",
-				}}
-			>
+			<div className="text-white outline-none">
 				{/* Fix  color and hover amd item hover and make center*/}
 				<Menu.Button className="ring-gray-300 inline-flex items-center justify-center rounded-[0.6rem] bg-accentPrimary px-[0.65rem] py-2 text-sm font-semibold ring-inset">
 					<HiUserCircle className="h-7 w-7" />
@@ -52,6 +55,9 @@ export default function ProfileDropdown() {
 						<Menu.Item>
 							{({ active }) => (
 								<button
+									onClick={() => {
+										logoutMutation.mutate();
+									}}
 									className={classNames(
 										active ? "bg-gray-100 text-gray-900" : "text-gray-700",
 										"block w-full px-4 py-2 text-left text-sm hover:opacity-70",
