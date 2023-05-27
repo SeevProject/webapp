@@ -16,13 +16,26 @@
 			@tailwind components;
 			@tailwind utilities;
 
+			@layer base {
+				@font-face {
+					font-family: "NRT";
+					font-weight: 400;
+					src: url(./src/assets/NRT400.woff) format("woff");
+				}
+				@font-face {
+					font-family: "NRT";
+					font-weight: 500;
+					src: url(./src/assets/NRT500.woff) format("woff");
+				}
+			}
+
 			* {
 				font-family: inherit;
 				color: inherit;
 			}
 
 			body {
-				font-family: "Poppins", sans-serif;
+				font-family: "NRT", sans-serif;
 				background-color: #fafafa;
 				color: #232022;
 			}
