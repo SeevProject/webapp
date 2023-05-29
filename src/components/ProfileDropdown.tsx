@@ -40,7 +40,7 @@ export default function ProfileDropdown(props: { notLoggedIn?: boolean }) {
 				leaveFrom="transform opacity-100 scale-100"
 				leaveTo="transform opacity-0 scale-95"
 			>
-				<Menu.Items className="ring-black absolute rounded-lg border border-border bg-box ring-opacity-5 focus:outline-none">
+				<Menu.Items className="ring-black absolute -left-[37px] rounded-lg border border-border bg-box ring-opacity-5 focus:outline-none">
 					{/* if the user is not logged in */}
 					{props.notLoggedIn ? (
 						<Menu.Item>
