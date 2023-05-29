@@ -6,7 +6,7 @@ export function ProfileDropdownItem(props: {
 	return (
 		<button
 			onClick={props.handleClick}
-			className="flex w-full flex-row rounded-md border border-transparent px-4 py-2 text-sm hover:border-accentPrimary"
+			className="flex w-full flex-row rounded-md border border-transparent py-2 pl-[0.5rem] pr-4 text-sm hover:border-accentPrimary"
 		>
 			{props.icon && props.icon}
 
