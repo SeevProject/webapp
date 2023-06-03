@@ -15,6 +15,7 @@ import { AdminPage } from "./pages/AdminPage";
 import AdminTemplate from "./pages/AdminTemplate";
 import AdminCompanie from "./pages/AdminCompanie";
 import AdminUser from "./pages/AdminUser";
+import LoginPage from "./pages/LoginPage";
 
 // import in all logic related to translation
 import "./translation";
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<Layout />}>
 			<Route path="/" element={<MainPage />} />
+			<Route path="/login" element={<LoginPage />} />
 			<Route path="admin" element={<AdminPage />} />
 			<Route path="admin/templates" element={<AdminTemplate />} />
 			<Route path="admin/companies" element={<AdminCompanie />} />

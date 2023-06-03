@@ -22,7 +22,7 @@ export function Nav() {
 				</Link>
 
 				{/* Navigation Center */}
-				{userInfoQuery.data || ( // add || for test but we should use &&
+				{userInfoQuery.data && (
 					<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
 						<NavCenterItem title="Templates" navigateTo="/admin/templates" />
 						<NavCenterItem title="Companies" navigateTo="/admin/companies" />
