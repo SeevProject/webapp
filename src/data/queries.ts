@@ -1,6 +1,6 @@
 export async function getUserInfo() {
 	// fetch user info
-	const res = await fetch("http://localhost:3000/users/me", {
+	const res = await fetch("http://localhost:8080/users/me", {
 		credentials: "include",
 	});
 

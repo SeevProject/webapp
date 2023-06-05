@@ -7,7 +7,7 @@ async function tryAuth(url: "login" | "register") {
 	const token = await user.getIdToken();
 
 	// send request to login with token
-	const res = await fetch(`http://localhost:3000/auth/${url}`, {
+	const res = await fetch(`http://localhost:8080/auth/${url}`, {
 		method: "POST",
 		credentials: "include",
 		headers: {
@@ -15,8 +15,10 @@ async function tryAuth(url: "login" | "register") {
 		},
 	});
 
+	console.log(res);
+
 	// if not ok, reject with status text
-	if (!res.ok) return Promise.reject(`${res.statusText}`);
+	if (!res.ok) return Promise.reject(`${res.body}`);
 
 	const data = await res.json();
 	return data;
@@ -37,7 +39,7 @@ export async function tryLogout() {
 	signOut(auth);
 
 	// send request for logout
-	const res = await fetch("http://localhost:3000/auth/logout", {
+	const res = await fetch("http://localhost:8080/auth/logout", {
 		method: "POST",
 		credentials: "include",
 	});
