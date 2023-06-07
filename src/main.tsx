@@ -18,6 +18,7 @@ import AdminUser from "./pages/AdminUser";
 
 // import in all logic related to translation
 import "./translation";
+import CompaniePage from "./pages/CompaniePage";
 
 // set routes for app
 const router = createBrowserRouter(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
 			<Route path="admin/templates" element={<AdminTemplate />} />
 			<Route path="admin/companies" element={<AdminCompanie />} />
 			<Route path="admin/users" element={<AdminUser />} />
+			<Route path="companie" element={<CompaniePage />} />
 			<Route path="*" element={<NotFoundPage />} />
 		</Route>,
 	),

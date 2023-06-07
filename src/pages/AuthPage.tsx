@@ -38,7 +38,7 @@ export function AuthPage() {
 					<p className="inline pl-12 text-[0.8rem] font-thin">Make it easier</p>
 				</p>
 				<div className="ml-16 mt-[7rem]">
-					<h1 className="mb-6 text-3xl font-bold">SIGN IN</h1>
+					<h1 className="mb-6 text-3xl font-bold">AUTHENTICATE</h1>
 					<div className="w-[15rem]">
 						<p>
 							Use one of the providers to sign in. No need to worry about
