@@ -1,16 +1,16 @@
 import { Outlet } from "react-router-dom";
 import { Nav } from "./Nav";
 import { useLocation } from "react-router-dom";
-import LoginPage from "../pages/LoginPage";
+import { AuthPage } from "../pages/AuthPage";
 
 export function Layout() {
 	const location = useLocation();
 
 	return (
 		<>
-			{location.pathname.includes("/login") ? (
+			{location.pathname.includes("/auth") ? (
 				<div className="grid grid-cols-2">
-					<LoginPage />
+					<AuthPage />
 				</div>
 			) : (
 				<div className="min-w-screen flex min-h-screen flex-col gap-8">
