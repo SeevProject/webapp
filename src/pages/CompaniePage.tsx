@@ -1,5 +1,11 @@
+import Popup from "../components/popup/Popup";
+
 const CompaniePage = () => {
-	return <div>CompaniePage</div>;
+	return (
+		<div className="w-32">
+			<Popup />
+		</div>
+	);
 };
 
 export default CompaniePage;
