@@ -1,20 +1,16 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { HiUserCircle, HiCog, HiArrowRight } from "react-icons/hi";
-import { tryLogout } from "../data/mutations";
-import { useMutation } from "@tanstack/react-query";
+import { HiUserCircle, HiCog } from "react-icons/hi";
 import { Button } from "./Button";
 import { ProfileDropdownItem } from "./ProfileDropdownItem";
 import { useNavigate } from "react-router-dom";
 
-export default function ProfileDropdown(props: { notLoggedIn?: boolean }) {
+export default function ProfileDropdown(props: {
+	notLoggedIn?: boolean;
+	customItemsComponent?: any;
+	menuItemsPoition?: string;
+}) {
 	const navigate = useNavigate();
-
-	// try to logout
-	const logoutMutation = useMutation({
-		mutationKey: ["logout"],
-		mutationFn: tryLogout,
-	});
 
 	return (
 		<Menu
@@ -40,7 +36,9 @@ export default function ProfileDropdown(props: { notLoggedIn?: boolean }) {
 				leaveFrom="transform opacity-100 scale-100"
 				leaveTo="transform opacity-0 scale-95"
 			>
-				<Menu.Items className="ring-black absolute -left-[37px] rounded-lg border border-border bg-box ring-opacity-5 focus:outline-none">
+				<Menu.Items
+					className={`ring-black absolute ${props.menuItemsPoition} rounded-lg border border-border bg-box ring-opacity-5 focus:outline-none`}
+				>
 					{/* if the user is not logged in */}
 					{props.notLoggedIn ? (
 						<Menu.Item>
@@ -56,25 +54,7 @@ export default function ProfileDropdown(props: { notLoggedIn?: boolean }) {
 						</Menu.Item>
 					) : (
 						// if the user is logged in
-						<>
-							<Menu.Item>
-								<ProfileDropdownItem
-									text="Settings"
-									icon={<HiCog className="text-gray-500 mr-2 inline h-5 w-5" />}
-									handleClick={() => {}}
-								/>
-							</Menu.Item>
-							<Menu.Item>
-								<ProfileDropdownItem
-									text="Logout"
-									icon={
-										<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
-									}
-									handleClick={() => logoutMutation.mutate()}
-								/>
-							</Menu.Item>
-						</>
-						// if the user is logged in end
+						props.customItemsComponent
 					)}
 				</Menu.Items>
 			</Transition>
