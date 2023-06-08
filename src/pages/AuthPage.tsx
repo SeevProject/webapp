@@ -2,10 +2,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../data/queries";
 import { tryLogin, tryRegister } from "../data/mutations";
 import { Navigate } from "react-router-dom";
-import { Button } from "../components/Button";
+import { Button } from "../components/button/Button";
 import { TbLogin } from "react-icons/tb";
 import { TbFingerprint } from "react-icons/tb";
-import ProfileDropdown from "../components/ProfileDropdown";
+import ProfileDropdown from "../components/dropdown/ProfileDropdown";
 import { Link } from "react-router-dom";
 
 export function AuthPage() {

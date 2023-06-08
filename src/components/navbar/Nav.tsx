@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserInfo } from "../data/queries";
+import { getUserInfo } from "../../data/queries";
 import { Link } from "react-router-dom";
-import ProfileDropdown from "./ProfileDropdown";
+import ProfileDropdown from "../dropdown/ProfileDropdown";
 import { AiOutlineLoading } from "react-icons/ai";
 import { NavCenterItem } from "./NavCenterItem";
 import { Menu } from "@headlessui/react";
-import { ProfileDropdownItem } from "./ProfileDropdownItem";
+import { ProfileDropdownItem } from "../dropdown/ProfileDropdownItem";
 import { HiCog, HiArrowRight } from "react-icons/hi";
-import { tryLogout } from "../data/mutations";
+import { tryLogout } from "../../data/mutations";
 import { useMutation } from "@tanstack/react-query";
 
 export function Nav() {

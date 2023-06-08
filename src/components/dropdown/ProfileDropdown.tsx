@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { HiUserCircle, HiCog } from "react-icons/hi";
-import { Button } from "./Button";
+import { Button } from "../button/Button";
 import { ProfileDropdownItem } from "./ProfileDropdownItem";
 import { useNavigate } from "react-router-dom";
 
