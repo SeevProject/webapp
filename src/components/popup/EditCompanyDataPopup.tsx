@@ -18,10 +18,14 @@ export default function EditCompanyDataPopup(props) {
 		onCancel();
 	};
 
-	const [isTrue, setIsTrue] = useState(false);
+	const [isApprovTrue, setIsApprovTrue] = useState(false);
+	const [isStudyingTrue, setIsStudyingTrue] = useState(false);
 
 	const handleClick = () => {
-		setIsTrue(!isTrue);
+		setIsApprovTrue(!isApprovTrue);
+	};
+	const handleStudyingClick = () => {
+		setIsStudyingTrue(!isStudyingTrue);
 	};
 
 	return (
@@ -71,11 +75,11 @@ export default function EditCompanyDataPopup(props) {
 													Approved:
 												</p>
 												<button
-													className="inline-block rounded-lg border border-border bg-box px-2 py-1"
+													className="inline-block rounded-lg border border-border bg-box px-[0.8rem] py-1"
 													onClick={handleClick}
 												>
-													{isTrue ? "Yes" : "No"}
-													{isTrue ? (
+													{isApprovTrue ? "Yes" : "No"}
+													{isApprovTrue ? (
 														<TiTick
 															style={{
 																display: "inline-block",
@@ -94,34 +98,57 @@ export default function EditCompanyDataPopup(props) {
 												<div className="mt-2">
 													<button>
 														X Languages:
-														<button className="inline-block rounded-lg border border-border bg-box px-2 py-1">
-															English lvl2
-														</button>
-														<button className="ml-1 inline-block rounded-lg border border-border bg-box px-2 py-1">
-															+
+														<select
+															id="countries"
+															className="text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-3 inline w-auto rounded-lg border border-border bg-box px-2 py-1.5 text-sm"
+														>
+															<option selected value="US">
+																English 1
+															</option>
+															<option value="CA">English 2</option>
+															<option value="FR">English 3</option>
+															<option value="DE">English 4</option>
+														</select>
+													</button>
+												</div>
+												<div className="mt-2">
+													<button>
+														X Studying:
+														<button
+															className="inline-block rounded-lg border border-border bg-box px-[0.8rem] py-1"
+															onClick={handleStudyingClick}
+														>
+															{isStudyingTrue ? "Yes" : "No"}
+															{isStudyingTrue ? (
+																<TiTick
+																	style={{
+																		display: "inline-block",
+																	}}
+																/>
+															) : (
+																<TiTimes
+																	style={{
+																		display: "inline-block",
+																	}}
+																/>
+															)}
 														</button>
 													</button>
 												</div>
 												<div className="mt-2">
 													<button>
-														X Languages:
-														<button className="inline-block rounded-lg border border-border bg-box px-2 py-1">
-															English lvl2
-														</button>
-														<button className="ml-1 inline-block rounded-lg border border-border bg-box px-2 py-1">
-															+
-														</button>
-													</button>
-												</div>
-												<div className="mt-2">
-													<button>
-														X Languages:
-														<button className="inline-block rounded-lg border border-border bg-box px-2 py-1">
-															English lvl2
-														</button>
-														<button className="ml-1 inline-block rounded-lg border border-border bg-box px-2 py-1">
-															+
-														</button>
+														X Locations:
+														<select
+															id="countries"
+															className="text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-3 inline w-auto rounded-lg border border-border bg-box px-2 py-1.5 text-sm"
+														>
+															<option selected value="US">
+																United States
+															</option>
+															<option value="CA">Canada</option>
+															<option value="FR">France</option>
+															<option value="DE">Germany</option>
+														</select>
 													</button>
 												</div>
 											</div>
