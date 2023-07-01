@@ -13,7 +13,7 @@ export default function EditCompanyDataPopup(props) {
 		return null;
 	}
 
-	const handleCancel = () => {
+	const handleClose = () => {
 		setOpen(false);
 		onCancel();
 	};
@@ -30,7 +30,8 @@ export default function EditCompanyDataPopup(props) {
 				as="div"
 				className="relative z-10"
 				initialFocus={cancelButtonRef}
-				onClose={() => setOpen(false)} // Fix the onClose event handler
+				onClose={handleClose} // Update the onClose event handler
+				onClick={handleClose} // Add onClick event handler
 			>
 				<Transition.Child
 					as={Fragment}
@@ -138,7 +139,7 @@ export default function EditCompanyDataPopup(props) {
 									<button
 										type="button"
 										className="bg-white text-gray-900 ring-gray-300 hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset sm:mt-0 sm:w-auto"
-										onClick={handleCancel}
+										onClick={handleClose}
 										ref={cancelButtonRef}
 									>
 										Cancel
