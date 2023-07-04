@@ -1,7 +1,3 @@
 export function AdminPage() {
-	return (
-		<div>
-			<h1>Some data</h1>
-		</div>
-	);
+	return <div>some data</div>;
 }
