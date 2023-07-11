@@ -1,6 +1,6 @@
-import { Button } from "../components/button/Button";
-
+import { Button } from '../components/button/Button';
 export function MainPage() {
+
 	return (
 		<div>
 			<h1 className="text-xl font-bold">Main Page</h1>

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "../../data/queries";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import ProfileDropdown from "../dropdown/ProfileDropdown";
 import { AiOutlineLoading } from "react-icons/ai";
 import { NavCenterItem } from "./NavCenterItem";
@@ -11,90 +11,77 @@ import { BiSupport } from "react-icons/bi";
 import { tryLogout } from "../../data/mutations";
 import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from "../../store/AuthContext";
+import CustomItemsCom from "../dropdown/CustomItemsCom";
+import { removeUser } from "../../data/userStorage";
 
 export function Nav() {
+	const { user, setUser } = useContext(AuthContext);
+
 	// get user info from server
 	const userInfoQuery = useQuery({
-		queryKey: ["userInfo"],
+		queryKey: ['userInfo'],
 		queryFn: getUserInfo,
 		retry: 1,
 	});
 
 	// try to logout
 	const logoutMutation = useMutation({
-		mutationKey: ["logout"],
+		mutationKey: ['logout'],
 		mutationFn: tryLogout,
 	});
+	
+	useEffect(() => {
+		if (logoutMutation.isSuccess) {
+			setUser((prevUser) => ({
+				...prevUser,
+				userData: {},
+				userLogin: false,
+				userLogout: logoutMutation.isSuccess,
+			}));
+			removeUser();
+		}
+	}, [logoutMutation]);
+
 	const location = useLocation();
+
 
 	return (
 		<div>
 			<div className="flex w-full flex-row items-center justify-between gap-4 px-24 pt-8">
 				{/* Logo */}
-				<Link to={"/"}>
+				<Link to={'/'}>
 					<p className="font-bold">Logo</p>
 				</Link>
 
-				{/* Navigation Center */}
-				{userInfoQuery.data && (
+				{/* Dropdown for profile */}
+				{userInfoQuery.isLoading ? (
+					<AiOutlineLoading className="h-8 w-8 animate-spin" />
+				) : userInfoQuery.isSuccess ? (
+					<ProfileDropdown
+						notLoggedIn={false}
+						menuItemsPoition={'-left-[25px]'}
+						customItemsComponent={<CustomItemsCom />}
+					/>
+				) : location.pathname.startsWith('/companie') ? (
+					<ProfileDropdown
+						notLoggedIn={false}
+						menuItemsPoition={'-left-[35px]'}
+						customItemsComponent={<CustomItemsCom />}
+					/>
+				) :location.pathname.startsWith('/admin') ? (
+
+						 <>
 					<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
 						<NavCenterItem title="Templates" navigateTo="/admin/templates" />
 						<NavCenterItem title="Companies" navigateTo="/admin/companies" />
 						<NavCenterItem title="Users" navigateTo="/admin/users" />
 					</div>
-				)}
-
-				{/* Dropdown for profile */}
-				{userInfoQuery.isLoading ? (
-					<AiOutlineLoading className="h-8 w-8 animate-spin" />
-				) : userInfoQuery.data ? (
-					<ProfileDropdown
-						notLoggedIn={true}
-						menuItemsPoition={"-left-[25px]"}
-					/>
-				) : location.pathname.startsWith("/companie") ? (
+				
 					<ProfileDropdown
 						notLoggedIn={false}
-						menuItemsPoition={"-left-[35px]"}
-						customItemsComponent={
-							<>
-								<p className="mb-[0.3rem] border-b border-b-border pl-3 pt-2 ">
-									CMP Name
-								</p>
-								<Menu.Item>
-									<ProfileDropdownItem
-										text="Settings"
-										icon={
-											<HiCog className="text-gray-500 mr-2 inline h-5 w-5 " />
-										}
-										handleClick={() => {}}
-									/>
-								</Menu.Item>
-								<Menu.Item>
-									<ProfileDropdownItem
-										text="Support"
-										icon={
-											<BiSupport className="text-gray-500 mr-2 inline h-5 w-5" />
-										}
-										handleClick={() => null}
-									/>
-								</Menu.Item>
-								<Menu.Item>
-									<ProfileDropdownItem
-										text="Logout"
-										icon={
-											<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
-										}
-										handleClick={() => logoutMutation.mutate()}
-									/>
-								</Menu.Item>
-							</>
-						}
-					/>
-				) : (
-					<ProfileDropdown
-						notLoggedIn={false}
-						menuItemsPoition={"-left-[35px]"}
+						menuItemsPoition={'-left-[35px]'}
 						customItemsComponent={
 							<>
 								<Menu.Item>
@@ -117,8 +104,8 @@ export function Nav() {
 								</Menu.Item>
 							</>
 						}
-					/>
-				)}
+					/> </>
+				):''}
 			</div>
 		</div>
 	);
