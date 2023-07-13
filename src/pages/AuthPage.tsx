@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getUserInfo } from '../data/queries';
 import { tryLogin, tryRegister } from '../data/mutations';
 import { Navigate } from 'react-router-dom';
 import { Button } from '../components/button/Button';
@@ -10,15 +9,19 @@ import { Link } from 'react-router-dom';
 import { auth } from '../firebase';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../store/AuthContext';
-import { saveUser } from '../data/userStorage';
+import { getIsLogin, getUser, saveIsLogin, saveUser } from '../data/userStorage';
+import { getUserInfo } from '../data/queries';
 
 export function AuthPage() {
 	const { user, setUser } = useContext(AuthContext);
-	console.log(Object.keys(user.userData).length);
 	// do login and logout mutations to server
 	const loginMutation = useMutation({
 		mutationKey: ['login'],
 		mutationFn: tryLogin,
+		onSuccess: () => {
+			// Trigger userInfoQuery after loginMutation is successful
+			userInfoQuery.refetch();
+		},
 	});
 
 	const registerMutation = useMutation({
@@ -45,6 +48,7 @@ export function AuthPage() {
 				userLogin: true,
 			}));
 			saveUser(userInfoQuery.data);
+			saveIsLogin();
 		}
 	}, [userInfoQuery]);
 
@@ -55,11 +59,27 @@ export function AuthPage() {
 				userLogin: true,
 				userLogout: false,
 			}));
+			saveIsLogin()
 		}
 	}, [loginMutation.isSuccess]);
 
+	useEffect(() => {
+		if (getIsLogin()) {
+			setUser((prevUser) => ({
+				...prevUser,
+				userLogin: true,
+				userLogout: false,
+			}));
+			saveIsLogin();
+		}
+	}, [getIsLogin()]);
+
+	
+	// console.log(getIsLogin());
+	// console.log(getUser());
+
 	// redirect to home if user is logged in
-	if (userInfoQuery.isSuccess || loginMutation.isSuccess)
+	if (getUser() && getIsLogin())
 		return <Navigate replace to={'/companie'}></Navigate>;
 
 	return (

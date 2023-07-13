@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { tryLogout } from '../../data/mutations';
 import  { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../store/AuthContext';
-import { removeUser } from '../../data/userStorage';
+import { removeIsLogin, removeUser } from '../../data/userStorage';
 
 function CustomItemsCom() {
 	const { user, setUser } = useContext(AuthContext);
@@ -15,19 +15,16 @@ function CustomItemsCom() {
 	const logoutMutation = useMutation({
 		mutationKey: ['logout'],
 		mutationFn: tryLogout,
+		onSuccess:()=>{
+			setUser((prevUser) => ({
+				...prevUser,
+				userData: {},
+				userLogin: false,
+				userLogout: true,
+			}));
+			removeUser();
+			removeIsLogin();}
 	});
-	
-		useEffect(() => {
-			if (logoutMutation.isSuccess) {
-				setUser((prevUser) => ({
-					...prevUser,
-					userData: {},
-					userLogin:false,
-					userLogout: logoutMutation.isSuccess,
-				}));
-				removeUser();
-			}
-		}, [logoutMutation]);
 
 	return (
 		<>

@@ -15,6 +15,7 @@ import { AuthContext } from './store/AuthContext';
 
 function App() {
 	const { user, setUser } = useContext(AuthContext);
+	console.log(user)
 	return (
 		<Routes>
 			<Route path="/" element={<Layout />}>

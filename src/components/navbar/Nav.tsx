@@ -1,20 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { getUserInfo } from "../../data/queries";
-import { Link, Navigate } from "react-router-dom";
-import ProfileDropdown from "../dropdown/ProfileDropdown";
-import { AiOutlineLoading } from "react-icons/ai";
-import { NavCenterItem } from "./NavCenterItem";
-import { Menu } from "@headlessui/react";
-import { ProfileDropdownItem } from "../dropdown/ProfileDropdownItem";
-import { HiCog, HiArrowRight } from "react-icons/hi";
-import { BiSupport } from "react-icons/bi";
-import { tryLogout } from "../../data/mutations";
-import { useMutation } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
+import { getUserInfo } from '../../data/queries';
+import { Link, Navigate } from 'react-router-dom';
+import ProfileDropdown from '../dropdown/ProfileDropdown';
+import { AiOutlineLoading } from 'react-icons/ai';
+import { NavCenterItem } from './NavCenterItem';
+import { Menu } from '@headlessui/react';
+import { ProfileDropdownItem } from '../dropdown/ProfileDropdownItem';
+import { HiCog, HiArrowRight } from 'react-icons/hi';
+import { BiSupport } from 'react-icons/bi';
+import { tryLogout } from '../../data/mutations';
+import { useMutation } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from "../../store/AuthContext";
-import CustomItemsCom from "../dropdown/CustomItemsCom";
-import { removeUser } from "../../data/userStorage";
+import { AuthContext } from '../../store/AuthContext';
+import CustomItemsCom from '../dropdown/CustomItemsCom';
+import { removeIsLogin, removeUser } from '../../data/userStorage';
 
 export function Nav() {
 	const { user, setUser } = useContext(AuthContext);
@@ -31,7 +31,7 @@ export function Nav() {
 		mutationKey: ['logout'],
 		mutationFn: tryLogout,
 	});
-	
+
 	useEffect(() => {
 		if (logoutMutation.isSuccess) {
 			setUser((prevUser) => ({
@@ -41,11 +41,11 @@ export function Nav() {
 				userLogout: logoutMutation.isSuccess,
 			}));
 			removeUser();
+			removeIsLogin();
 		}
 	}, [logoutMutation]);
 
 	const location = useLocation();
-
 
 	return (
 		<div>
@@ -58,7 +58,8 @@ export function Nav() {
 				{/* Dropdown for profile */}
 				{userInfoQuery.isLoading ? (
 					<AiOutlineLoading className="h-8 w-8 animate-spin" />
-				) : userInfoQuery.isSuccess ? (
+				) : userInfoQuery.isSuccess &&
+				  location.pathname.startsWith('/companie') ? (
 					<ProfileDropdown
 						notLoggedIn={false}
 						menuItemsPoition={'-left-[25px]'}
@@ -70,42 +71,43 @@ export function Nav() {
 						menuItemsPoition={'-left-[35px]'}
 						customItemsComponent={<CustomItemsCom />}
 					/>
-				) :location.pathname.startsWith('/admin') ? (
-
-						 <>
-					<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
-						<NavCenterItem title="Templates" navigateTo="/admin/templates" />
-						<NavCenterItem title="Companies" navigateTo="/admin/companies" />
-						<NavCenterItem title="Users" navigateTo="/admin/users" />
-					</div>
-				
-					<ProfileDropdown
-						notLoggedIn={false}
-						menuItemsPoition={'-left-[35px]'}
-						customItemsComponent={
-							<>
-								<Menu.Item>
-									<ProfileDropdownItem
-										text="Settings"
-										icon={
-											<HiCog className="text-gray-500 mr-2 inline h-5 w-5" />
-										}
-										handleClick={() => {}}
-									/>
-								</Menu.Item>
-								<Menu.Item>
-									<ProfileDropdownItem
-										text="Logout"
-										icon={
-											<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
-										}
-										handleClick={() => logoutMutation.mutate()}
-									/>
-								</Menu.Item>
-							</>
-						}
-					/> </>
-				):''}
+				) : location.pathname.startsWith('/admin') ? (
+					<>
+						<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
+							<NavCenterItem title="Templates" navigateTo="/admin/templates" />
+							<NavCenterItem title="Companies" navigateTo="/admin/companies" />
+							<NavCenterItem title="Users" navigateTo="/admin/users" />
+						</div>
+						<ProfileDropdown
+							notLoggedIn={false}
+							menuItemsPoition={'-left-[35px]'}
+							customItemsComponent={
+								<>
+									<Menu.Item>
+										<ProfileDropdownItem
+											text="Settings"
+											icon={
+												<HiCog className="text-gray-500 mr-2 inline h-5 w-5" />
+											}
+											handleClick={() => {}}
+										/>
+									</Menu.Item>
+									<Menu.Item>
+										<ProfileDropdownItem
+											text="Logout"
+											icon={
+												<HiArrowRight className="text-gray-500 mr-2 inline h-5 w-5" />
+											}
+											handleClick={() => logoutMutation.mutate()}
+										/>
+									</Menu.Item>
+								</>
+							}
+						/>{' '}
+					</>
+				) : (
+					''
+				)}
 			</div>
 		</div>
 	);
