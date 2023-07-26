@@ -1,161 +1,103 @@
+import { useMemo } from "react";
 import { PiDotsThreeCircleLight } from "react-icons/pi";
+import {
+	flexRender,
+	useReactTable,
+	getCoreRowModel,
+	getPaginationRowModel,
+} from "@tanstack/react-table";
+import Data from "./MOCK_DATA.json";
+import { column } from "./Header";
 
 const Table = () => {
+	const data = useMemo(() => Data, []);
+	const columns = useMemo(() => column, []);
+
+	const table = useReactTable({
+		data,
+		columns,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(), // Pagination to got to another page for table and only show 10 or any number records
+	});
+
+	const { getHeaderGroups, getRowModel } = table;
+
 	return (
 		<div>
-			<div className="bg-gray-100 h-screen p-5">
-				<div className=" mx-6 overflow-auto rounded-lg">
-					<table className="w-full">
-						<thead>
-							<tr>
-								<th className="w-32">
-									<input
-										type="text"
-										className=" mb-3 w-32 rounded-full border border-border bg-box p-2 text-center  text-sm font-semibold tracking-wide outline-none placeholder:text-textAlt"
-										placeholder="Name"
-										required
-									/>
-								</th>
-								<th className="w-0">
-									<input
-										type="text"
-										className=" mb-3 w-28 rounded-full border border-border bg-box p-2 text-center  text-sm font-semibold tracking-wide outline-none placeholder:text-textAlt"
-										placeholder="Gender"
-										required
-									/>
-								</th>
-								<th className="w-0">
-									<input
-										type="text"
-										className=" mb-3 w-28 rounded-full border border-border bg-box p-2 text-center  text-sm font-semibold tracking-wide outline-none placeholder:text-textAlt"
-										placeholder="Age"
-										required
-									/>
-								</th>
-
-								<th className="w-0">
-									<input
-										type="text"
-										className=" mb-3 w-28 rounded-full border border-border bg-box p-2 text-center  text-sm font-semibold tracking-wide outline-none placeholder:text-textAlt"
-										placeholder="pdH"
-										required
-									/>
-								</th>
-
-								<th className="w-0">
-									<input
-										type="text"
-										className="mb-3 w-48 rounded-full border border-border bg-box p-2 text-center  text-sm font-semibold tracking-wide outline-none placeholder:text-textAlt"
-										placeholder="Field"
-										required
-									/>
-								</th>
-								<th className="w-0">
-									<input
-										type="text"
-										className="mb-3 w-32 rounded-full border border-border bg-box p-2 text-center  text-sm font-semibold tracking-wide outline-none placeholder:text-textAlt"
-										placeholder="Employ"
-										required
-									/>
-								</th>
-								<th className="w-0">
-									<div className="mb-3"> </div>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr className="bg-white">
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									<a
-										href="#"
-										className="text-blue-500 font-bold hover:underline"
+			<div className="bg-gray-100 text-gray-600 px-4 antialiased">
+				<div className="flex h-full flex-col justify-center">
+					<div className="bg-white mx-auto w-full max-w-7xl rounded-sm  shadow-lg">
+						<div className="p-3">
+							<div className="overflow-x-auto">
+								<table className="w-full table-auto">
+									<thead className="text-gray-400 bg-gray-50 text-xs font-semibold uppercase">
+										{getHeaderGroups().map((headerGroup) => (
+											<tr key={headerGroup.id}>
+												{headerGroup.headers.map((header) => (
+													<th
+														className="pb-4"
+														key={header.id}
+														onClick={header.column.getToggleSortingHandler()}
+													>
+														{flexRender(
+															header.column.columnDef.header,
+															header.getContext(),
+														)}
+													</th>
+												))}
+											</tr>
+										))}
+									</thead>
+									<tbody className="mb-2 text-sm">
+										{getRowModel().rows.map((row) => (
+											<tr key={row.id}>
+												{row.getVisibleCells().map((cell) => (
+													<td
+														key={cell.id}
+														className="w-36 whitespace-nowrap p-2 pb-6 text-center"
+													>
+														{flexRender(
+															cell.column.columnDef.cell,
+															cell.getContext(),
+														)}
+													</td>
+												))}
+											</tr>
+										))}
+									</tbody>
+								</table>
+								{/* buttons for pagination to got to next page and previous page and also last page and first page   */}
+								<div>
+									<button
+										className="mr-4 bg-box"
+										onClick={() => table.setPageIndex(0)}
 									>
-										John
-									</a>
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Male
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									<span className="text-green-800 bg-green-200 rounded-lg bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider">
-										25
-									</span>
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									pdH
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Computer since
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Non-employ
-								</td>
-								<td>
-									<PiDotsThreeCircleLight className="h-[23px] w-[23px] cursor-pointer" />
-								</td>
-							</tr>
-							<tr className="bg-white">
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									<a
-										href="#"
-										className="text-blue-500 font-bold hover:underline"
+										First Page
+									</button>
+									<button
+										className="mr-4 bg-box"
+										disabled={!table.getCanPreviousPage()}
+										onClick={() => table.previousPage()}
 									>
-										John
-									</a>
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Male
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									<span className="text-green-800 bg-green-200 rounded-lg bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider">
-										25
-									</span>
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									pdH
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Computer since
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Non-employ
-								</td>
-								<td>
-									<PiDotsThreeCircleLight className="h-[23px] w-[23px] cursor-pointer" />
-								</td>
-							</tr>
-							<tr className="bg-white">
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									<a
-										href="#"
-										className="text-blue-500 font-bold hover:underline"
+										Previous Page
+									</button>
+									<button
+										className="mr-4 bg-box"
+										disabled={!table.getCanNextPage()}
+										onClick={() => table.nextPage()}
 									>
-										John
-									</a>
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Male
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									<span className="text-green-800 bg-green-200 rounded-lg bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider">
-										25
-									</span>
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									pdH
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Computer since
-								</td>
-								<td className="text-gray-700 whitespace-nowrap p-3 text-center text-sm">
-									Non-employ
-								</td>
-								<td>
-									<PiDotsThreeCircleLight className="h-[23px] w-[23px] cursor-pointer" />
-								</td>
-							</tr>
-						</tbody>
-					</table>
+										Next Page
+									</button>
+									<button
+										className="mr-4 bg-box"
+										onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+									>
+										Last Page
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
