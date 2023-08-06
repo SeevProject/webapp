@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getUserInfo } from '../../data/queries';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProfileDropdown from '../dropdown/ProfileDropdown';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { NavCenterItem } from './NavCenterItem';
@@ -11,14 +11,13 @@ import { BiSupport } from 'react-icons/bi';
 import { tryLogout } from '../../data/mutations';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext} from 'react';
 import { AuthContext } from '../../store/AuthContext';
 import CustomItemsCom from '../dropdown/CustomItemsCom';
-import { removeIsLogin, removeUser } from '../../data/userStorage';
 
 export function Nav() {
-	const { user, setUser } = useContext(AuthContext);
-
+	const { user, setUser, setLogin } = useContext(AuthContext);
+    const location = useLocation();
 	// get user info from server
 	const userInfoQuery = useQuery({
 		queryKey: ['userInfo'],
@@ -30,22 +29,14 @@ export function Nav() {
 	const logoutMutation = useMutation({
 		mutationKey: ['logout'],
 		mutationFn: tryLogout,
+		onSuccess: () => {
+			setUser(null);
+		},
 	});
+	// console.log(user);
 
-	useEffect(() => {
-		if (logoutMutation.isSuccess) {
-			setUser((prevUser) => ({
-				...prevUser,
-				userData: {},
-				userLogin: false,
-				userLogout: logoutMutation.isSuccess,
-			}));
-			removeUser();
-			removeIsLogin();
-		}
-	}, [logoutMutation]);
+	
 
-	const location = useLocation();
 
 	return (
 		<div>

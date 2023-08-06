@@ -1,15 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { tryLogin, tryRegister } from '../data/mutations';
-import { Navigate } from 'react-router-dom';
+import { tryLogin, tryLogout, tryRegister } from '../data/mutations';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button/Button';
 import { TbLogin } from 'react-icons/tb';
 import { TbFingerprint } from 'react-icons/tb';
 import ProfileDropdown from '../components/dropdown/ProfileDropdown';
 import { Link } from 'react-router-dom';
-import { auth } from '../firebase';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../store/AuthContext';
-import { getIsLogin, getUser, saveIsLogin, saveUser } from '../data/userStorage';
 import { getUserInfo } from '../data/queries';
 
 export function AuthPage() {
@@ -33,53 +31,19 @@ export function AuthPage() {
 	const userInfoQuery = useQuery({
 		queryKey: ['userInfo'],
 		queryFn: getUserInfo,
+		onSuccess:(data)=>{
+				setUser(data);
+			
+		},
+		onError: (err) => {
+			setUser(null);
+		},
 		retry: 1,
 	});
-
-	useEffect(() => {
-		if (
-			userInfoQuery.isSuccess &&
-			user.userLogout === false &&
-			user.userLogin === true
-		) {
-			setUser((prevUser) => ({
-				...prevUser,
-				userData: userInfoQuery.data,
-				userLogin: true,
-			}));
-			saveUser(userInfoQuery.data);
-			saveIsLogin();
-		}
-	}, [userInfoQuery]);
-
-	useEffect(() => {
-		if (loginMutation.isSuccess) {
-			setUser((prevUser) => ({
-				...prevUser,
-				userLogin: true,
-				userLogout: false,
-			}));
-			saveIsLogin()
-		}
-	}, [loginMutation.isSuccess]);
-
-	useEffect(() => {
-		if (getIsLogin()) {
-			setUser((prevUser) => ({
-				...prevUser,
-				userLogin: true,
-				userLogout: false,
-			}));
-			saveIsLogin();
-		}
-	}, [getIsLogin()]);
-
 	
-	// console.log(getIsLogin());
-	// console.log(getUser());
 
 	// redirect to home if user is logged in
-	if (getUser() && getIsLogin())
+	if (user)
 		return <Navigate replace to={'/companie'}></Navigate>;
 
 	return (

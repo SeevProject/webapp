@@ -14,8 +14,8 @@ import AdminUser from './pages/AdminUser';
 import { AuthContext } from './store/AuthContext';
 
 function App() {
-	const { user, setUser } = useContext(AuthContext);
-	console.log(user)
+	const { user } = useContext(AuthContext);
+	
 	return (
 		<Routes>
 			<Route path="/" element={<Layout />}>

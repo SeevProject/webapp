@@ -5,9 +5,8 @@ import { HiArrowRight, HiCog } from 'react-icons/hi';
 import { BiSupport } from 'react-icons/bi';
 import { useMutation } from '@tanstack/react-query';
 import { tryLogout } from '../../data/mutations';
-import  { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../../store/AuthContext';
-import { removeIsLogin, removeUser } from '../../data/userStorage';
 
 function CustomItemsCom() {
 	const { user, setUser } = useContext(AuthContext);
@@ -16,15 +15,10 @@ function CustomItemsCom() {
 		mutationKey: ['logout'],
 		mutationFn: tryLogout,
 		onSuccess:()=>{
-			setUser((prevUser) => ({
-				...prevUser,
-				userData: {},
-				userLogin: false,
-				userLogout: true,
-			}));
-			removeUser();
-			removeIsLogin();}
+			setUser(null);
+		}
 	});
+
 
 	return (
 		<>

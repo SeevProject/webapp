@@ -1,6 +1,5 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
-import { removeUser } from './userStorage';
 
 async function tryAuth(url: 'login' | 'register') {
 	// sign in and get token
@@ -57,6 +56,5 @@ export async function tryLogout() {
 	if (!res.ok) return Promise.reject(`${res.statusText}`);
 	const data = await res.json();
 
-	removeUser();
 	return data;
 }
