@@ -1,16 +1,42 @@
-import { useMemo } from "react";
-import { PiDotsThreeCircleLight } from "react-icons/pi";
+import { useMemo } from 'react';
+import { PiDotsThreeCircleLight } from 'react-icons/pi';
 import {
 	flexRender,
 	useReactTable,
 	getCoreRowModel,
 	getPaginationRowModel,
-} from "@tanstack/react-table";
-import Data from "./MOCK_DATA.json";
-import { column } from "./Header";
+} from '@tanstack/react-table';
+import Data from './MOCK_DATA.json';
+import { column } from './Header';
+import { getAllUserInfo } from '../../data/queries';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 const Table = () => {
-	const data = useMemo(() => Data, []);
+	const [user, setUser] = useState([]);
+	// get user info from server
+	const userInfoQuery = useQuery({
+		queryKey: ['getAllUser'],
+		queryFn: getAllUserInfo,
+		onSuccess: (data) => {
+			const newObj = data.data.map((a) => ({
+				name: a.username,
+				gender: 'Male',
+				age: 28,
+				phD: 'phD',
+				field: a.data.education,
+				employ: 'Yes',
+			}));
+			setUser(newObj);
+		},
+		onError: (err) => {
+			console.log('dont return data');
+		},
+		retry: 1,
+	});
+
+
+	const data = useMemo(() => user, [user]);
 	const columns = useMemo(() => column, []);
 
 	const table = useReactTable({
@@ -21,6 +47,8 @@ const Table = () => {
 	});
 
 	const { getHeaderGroups, getRowModel } = table;
+
+	if (user.length === 0 || userInfoQuery.isError) return <div>Loading...</div>;
 
 	return (
 		<div>
