@@ -1,5 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { tryLogin, tryLoginWithGoogle, tryLogout, tryRegister } from '../data/mutations';
+import {
+	tryLogin,
+	tryLoginWithGoogle,
+	tryLogout
+} from '../data/mutations';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button/Button';
 import { TbLogin } from 'react-icons/tb';
@@ -10,6 +14,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../store/AuthContext';
 import { getUserInfo, getUserOrAdminInfo } from '../data/queries';
 import { Iput } from '../components/input/Iput';
+import { NavLink } from 'react-router-dom';
 
 export function AuthPage() {
 	const { user, setUser } = useContext(AuthContext);
@@ -25,11 +30,6 @@ export function AuthPage() {
 			// Trigger userInfoQuery after loginMutation is successful
 			userInfoQuery.refetch();
 		},
-	});
-
-	const registerMutation = useMutation({
-		mutationKey: ['register'],
-		mutationFn: tryRegister,
 	});
 	// get user info from server
 	const userInfoQuery = useQuery({
@@ -82,9 +82,9 @@ export function AuthPage() {
 	};
 
 	if (user?.data) {
-		if (user?.data.type === "admin") {
+		if (user?.data.type === 'admin') {
 			return <Navigate replace to={'/admin'} />;
-		} else if (user?.data.type === "company") {
+		} else if (user?.data.type === 'company') {
 			return <Navigate replace to={'/companie'} />;
 		}
 	}
@@ -166,14 +166,7 @@ export function AuthPage() {
 								handleClick={() => loginWithGoogleMutation.mutate()}
 							/>
 						</div>
-						<div>
-							<Button
-								className="font mt-[.8rem] w-[14rem] py-2 text-lg"
-								icon={<TbLogin />}
-								handleClick={() => registerMutation.mutate()}
-								title="Register"
-							/>
-						</div>
+						
 					</form>
 
 					{/* on errors */}
@@ -191,12 +184,10 @@ export function AuthPage() {
 	);
 }
 
-
-
-	// 	mutationKey: ['login'],
-	// 	mutationFn: tryLogin,
-	// 	onSuccess: () => {
-	// 		// Trigger userInfoQuery after loginMutation is successful
-	// 		userInfoQuery.refetch();
-	// 	},
-	// });
+// 	mutationKey: ['login'],
+// 	mutationFn: tryLogin,
+// 	onSuccess: () => {
+// 		// Trigger userInfoQuery after loginMutation is successful
+// 		userInfoQuery.refetch();
+// 	},
+// });

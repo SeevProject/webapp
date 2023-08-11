@@ -15,7 +15,7 @@ import { AuthContext } from './store/AuthContext';
 
 function App() {
 	const { user } = useContext(AuthContext);
-	
+
 	return (
 		<Routes>
 			<Route path="/" element={<Layout />}>
@@ -26,9 +26,7 @@ function App() {
 					<Route path="companie" element={<CompaniePage />} />
 				</Route>
 
-				<Route
-					element={<Protected user={user} role="admin" />}
-				>
+				<Route element={<Protected user={user} role="admin" />}>
 					<Route path="admin" element={<AdminPage />} />
 					<Route path="admin/templates" element={<AdminTemplate />} />
 					<Route path="admin/companies" element={<AdminCompanie />} />

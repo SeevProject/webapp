@@ -1,6 +1,6 @@
 export async function getUserInfo() {
 	// fetch user info
-	const res = await fetch('http://localhost:8080/companies/me', {
+	const res = await fetch('http://localhost:3000/companies/me', {
 		method: 'GET',
 		credentials: 'include',
 	});
@@ -14,7 +14,7 @@ export async function getUserInfo() {
 }
 export async function getUserOrAdminInfo() {
 	// fetch user info
-	const res = await fetch('http://localhost:8080/users/meBoth', {
+	const res = await fetch('http://localhost:3000/admin/admin', {
 		method: 'GET',
 		credentials: 'include',
 	});
@@ -28,7 +28,7 @@ export async function getUserOrAdminInfo() {
 }
 export async function getAllUserInfo() {
 	// fetch user info
-	const res = await fetch('http://localhost:8080/users', {
+	const res = await fetch('http://localhost:3000/users', {
 		method: 'GET',
 		credentials: 'include',
 	});

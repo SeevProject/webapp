@@ -15,7 +15,7 @@ async function tryAuthwithgoogle(url: 'login') {
 	};
 
 	// send request to login with token
-	const res = await fetch(`http://localhost:8080/auth/loginwithgoogle`, {
+	const res = await fetch(`http://localhost:3000/auth/loginwithgoogle`, {
 		method: 'POST',
 		credentials: 'include',
 		body: new Blob([JSON.stringify(bodyData)], { type: 'application/json' }),
@@ -41,11 +41,12 @@ export async function tryLoginWithGoogle() {
 export async function tryLogin(username: string, password: string) {
 	const bodyData = {
 		uid: password,
-		username: username
+		username: username,
+		type:"admin"
 	};
 
 	// send request to login with token
-	const res = await fetch(`http://localhost:8080/auth/login`, {
+	const res = await fetch(`http://localhost:3000/auth/login`, {
 		method: 'POST',
 		credentials: 'include',
 		body: new Blob([JSON.stringify(bodyData)], { type: 'application/json' }),
@@ -61,36 +62,14 @@ export async function tryLogin(username: string, password: string) {
 	return data;
 }
 
-export async function tryRegister() {
-	// console.log(user);
 
-	// const bodyData = {
-	// 	uid: user?.user.providerData[0].uid,
-	// 	username: user?.user.providerData[0].displayName,
-	// 	type: 'company',
-	// };
-
-	// // send request to login with token
-	// const res = await fetch(`http://localhost:8080/auth/${url}`, {
-	// 	method: 'POST',
-	// 	credentials: 'include',
-	// 	body: new Blob([JSON.stringify(bodyData)], { type: 'application/json' }),
-	// });
-
-	// // if not ok, reject with status text
-	// if (!res.ok) return Promise.reject(`${res.body}`);
-
-	// const data = await res.json();
-
-	// return data;
-}
 
 export async function tryLogout() {
 	// sign out from google
 	signOut(auth);
 
 	// send request for logout
-	const res = await fetch('http://localhost:8080/auth/logout', {
+	const res = await fetch('http://localhost:3000/auth/logout', {
 		method: 'POST',
 		credentials: 'include',
 	});

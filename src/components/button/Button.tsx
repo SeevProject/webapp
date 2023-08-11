@@ -3,7 +3,7 @@ import React from "react";
 export function Button(props: {
 	title?: string;
 	icon?: React.ReactNode;
-	handleClick: () => void;
+	handleClick:any;
 	style?: React.CSSProperties; // you can add css styles with this props
 	className?: string; // you can add styles to button with tailwind
 }) {
