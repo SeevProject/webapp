@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { tryLogin, tryLogout, tryRegister } from '../data/mutations';
+import { tryLogin, tryLoginWithGoogle, tryLogout, tryRegister } from '../data/mutations';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button/Button';
 import { TbLogin } from 'react-icons/tb';
@@ -8,14 +8,19 @@ import ProfileDropdown from '../components/dropdown/ProfileDropdown';
 import { Link } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../store/AuthContext';
-import { getUserInfo } from '../data/queries';
+import { getUserInfo, getUserOrAdminInfo } from '../data/queries';
+import { Iput } from '../components/input/Iput';
 
 export function AuthPage() {
 	const { user, setUser } = useContext(AuthContext);
+	const [formData, setFormData] = useState({
+		username: '',
+		password: '',
+	});
 	// do login and logout mutations to server
-	const loginMutation = useMutation({
+	const loginWithGoogleMutation = useMutation({
 		mutationKey: ['login'],
-		mutationFn: tryLogin,
+		mutationFn: tryLoginWithGoogle,
 		onSuccess: () => {
 			// Trigger userInfoQuery after loginMutation is successful
 			userInfoQuery.refetch();
@@ -26,25 +31,63 @@ export function AuthPage() {
 		mutationKey: ['register'],
 		mutationFn: tryRegister,
 	});
-
 	// get user info from server
 	const userInfoQuery = useQuery({
 		queryKey: ['userInfo'],
 		queryFn: getUserInfo,
-		onSuccess:(data)=>{
-				setUser(data);
-			
+		onSuccess: (data) => {
+			setUser(data);
 		},
 		onError: (err) => {
-			setUser(null);
+			// setUser(null);
 		},
 		retry: 1,
 	});
-	
+	// get user and admin info from server
+	const getUserAdminInfo = useQuery({
+		queryKey: ['userAdminInfo'],
+		queryFn: getUserOrAdminInfo,
+		onSuccess: (data) => {
+			setUser(data);
+		},
+		onError: (err) => {
+			// setUser(null);
+		},
+		retry: 1,
+	});
 
-	// redirect to home if user is logged in
-	if (user)
-		return <Navigate replace to={'/companie'}></Navigate>;
+	const mutationConfig = {
+		mutationKey: ['loginn'],
+		mutationFn: (data) => tryLogin(data.username, data.password),
+		onSuccess: () => {
+			getUserAdminInfo.refetch();
+		},
+		onError: (err) => {
+			console.log(err);
+		},
+	};
+	const mutation = useMutation(mutationConfig);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		mutation.mutate({
+			username: formData.username,
+			password: formData.password,
+		});
+		console.log('submit');
+	};
+
+	const handleInput = (e) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	if (user?.data) {
+		if (user?.data.type === "admin") {
+			return <Navigate replace to={'/admin'} />;
+		} else if (user?.data.type === "company") {
+			return <Navigate replace to={'/companie'} />;
+		}
+	}
 
 	return (
 		<>
@@ -88,22 +131,51 @@ export function AuthPage() {
 						</Link>
 						us to create one.
 					</p>
-					<div>
-						<Button
-							className="font mt-[.8rem] w-[14rem] py-2 text-lg"
-							title="Login with Google"
-							icon={<TbLogin />}
-							handleClick={() => loginMutation.mutate()}
-						/>
-					</div>
-					<div>
-						<Button
-							className="font mt-[.8rem] w-[14rem] py-2 text-lg"
-							icon={<TbLogin />}
-							handleClick={() => registerMutation.mutate()}
-							title="Register"
-						/>
-					</div>
+					<form action="#">
+						<div className="loginInputs">
+							<Iput
+								type="text"
+								className="font text-md mt-[.8rem] w-[14rem] py-2"
+								placeholder="username"
+								handleClick={handleInput}
+								value={formData.username}
+								name="username"
+							/>
+							<Iput
+								type="text"
+								className="font text-md mt-[.8rem] w-[14rem] py-2"
+								placeholder="password"
+								handleClick={handleInput}
+								value={formData.password}
+								name="password"
+							/>
+						</div>
+						<div>
+							<Button
+								className="font mt-[.8rem] w-[14rem] py-2 text-lg"
+								title="Login"
+								icon={<TbLogin />}
+								handleClick={handleSubmit}
+							/>
+						</div>
+						<div>
+							<Button
+								className="font mt-[.8rem] w-[14rem] py-2 text-lg"
+								title="Login with Google"
+								icon={<TbLogin />}
+								handleClick={() => loginWithGoogleMutation.mutate()}
+							/>
+						</div>
+						<div>
+							<Button
+								className="font mt-[.8rem] w-[14rem] py-2 text-lg"
+								icon={<TbLogin />}
+								handleClick={() => registerMutation.mutate()}
+								title="Register"
+							/>
+						</div>
+					</form>
+
 					{/* on errors */}
 					{userInfoQuery.status === 'error' && (
 						<>
@@ -118,3 +190,13 @@ export function AuthPage() {
 		</>
 	);
 }
+
+
+
+	// 	mutationKey: ['login'],
+	// 	mutationFn: tryLogin,
+	// 	onSuccess: () => {
+	// 		// Trigger userInfoQuery after loginMutation is successful
+	// 		userInfoQuery.refetch();
+	// 	},
+	// });

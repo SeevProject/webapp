@@ -26,14 +26,14 @@ function App() {
 					<Route path="companie" element={<CompaniePage />} />
 				</Route>
 
-				{/* <Route
+				<Route
 					element={<Protected user={user} role="admin" />}
-				> */}
+				>
 					<Route path="admin" element={<AdminPage />} />
 					<Route path="admin/templates" element={<AdminTemplate />} />
 					<Route path="admin/companies" element={<AdminCompanie />} />
 					<Route path="admin/users" element={<AdminUser />} />
-				{/* </Route> */}
+				</Route>
 
 				<Route path="*" element={<NotFoundPage />} />
 			</Route>

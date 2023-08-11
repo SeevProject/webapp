@@ -11,19 +11,13 @@ import { BiSupport } from 'react-icons/bi';
 import { tryLogout } from '../../data/mutations';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
-import React, { useContext} from 'react';
+import React, { useContext } from 'react';
 import { AuthContext } from '../../store/AuthContext';
 import CustomItemsCom from '../dropdown/CustomItemsCom';
 
 export function Nav() {
-	const { user, setUser, setLogin } = useContext(AuthContext);
-    const location = useLocation();
-	// get user info from server
-	const userInfoQuery = useQuery({
-		queryKey: ['userInfo'],
-		queryFn: getUserInfo,
-		retry: 1,
-	});
+	const { user, setUser } = useContext(AuthContext);
+	const location = useLocation();
 
 	// try to logout
 	const logoutMutation = useMutation({
@@ -35,9 +29,6 @@ export function Nav() {
 	});
 	// console.log(user);
 
-	
-
-
 	return (
 		<div>
 			<div className="flex w-full flex-row items-center justify-between gap-4 px-24 pt-8">
@@ -47,10 +38,9 @@ export function Nav() {
 				</Link>
 
 				{/* Dropdown for profile */}
-				{userInfoQuery.isLoading ? (
+				{!user ? (
 					<AiOutlineLoading className="h-8 w-8 animate-spin" />
-				) : userInfoQuery.isSuccess &&
-				  location.pathname.startsWith('/companie') ? (
+				) : user && location.pathname.startsWith('/companie') ? (
 					<ProfileDropdown
 						notLoggedIn={false}
 						menuItemsPoition={'-left-[25px]'}

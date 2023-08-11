@@ -1,7 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 
-async function tryAuth(url: 'login' | 'register') {
+async function tryAuthwithgoogle(url: 'login') {
 	// sign in and get token
 	const user = await signInWithPopup(auth, new GoogleAuthProvider());
 	// console.log(user);
@@ -34,12 +34,55 @@ async function tryAuth(url: 'login' | 'register') {
 
 // login and register both call auth using different urls
 
-export async function tryLogin() {
-	return tryAuth('login');
+export async function tryLoginWithGoogle() {
+	return tryAuthwithgoogle('login');
+}
+
+export async function tryLogin(username: string, password: string) {
+	const bodyData = {
+		uid: password,
+		username: username
+	};
+
+	// send request to login with token
+	const res = await fetch(`http://localhost:8080/auth/login`, {
+		method: 'POST',
+		credentials: 'include',
+		body: new Blob([JSON.stringify(bodyData)], { type: 'application/json' }),
+	});
+
+	// if not ok, reject with status text
+	if (!res.ok) return Promise.reject(`${res.body}`);
+
+	const data = await res.json();
+
+	console.log(data)
+
+	return data;
 }
 
 export async function tryRegister() {
-	return tryAuth('register');
+	// console.log(user);
+
+	// const bodyData = {
+	// 	uid: user?.user.providerData[0].uid,
+	// 	username: user?.user.providerData[0].displayName,
+	// 	type: 'company',
+	// };
+
+	// // send request to login with token
+	// const res = await fetch(`http://localhost:8080/auth/${url}`, {
+	// 	method: 'POST',
+	// 	credentials: 'include',
+	// 	body: new Blob([JSON.stringify(bodyData)], { type: 'application/json' }),
+	// });
+
+	// // if not ok, reject with status text
+	// if (!res.ok) return Promise.reject(`${res.body}`);
+
+	// const data = await res.json();
+
+	// return data;
 }
 
 export async function tryLogout() {
