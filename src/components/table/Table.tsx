@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { PiDotsThreeCircleLight } from 'react-icons/pi';
 import {
 	flexRender,
@@ -6,14 +6,17 @@ import {
 	getCoreRowModel,
 	getPaginationRowModel,
 } from '@tanstack/react-table';
-import Data from './MOCK_DATA.json';
 import { column } from './Header';
 import { getAllUserInfo } from '../../data/queries';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { AuthContext } from '../../store/AuthContext';
 
 const Table = () => {
-	const [user, setUser] = useState([]);
+	const { user, setUser } = useContext(AuthContext);
+	const [userS, setUserS] = useState([]);
+	const [path, setPath] = useState('');
 	// get user info from server
 	const userInfoQuery = useQuery({
 		queryKey: ['getAllUser'],
@@ -24,10 +27,11 @@ const Table = () => {
 				gender: 'Male',
 				age: 28,
 				phD: 'phD',
-				field: a.data.education,
+				field: 'a.data.education',
 				employ: 'Yes',
+				id: a._id,
 			}));
-			setUser(newObj);
+			setUserS(newObj);
 		},
 		onError: (err) => {
 			console.log('dont return data');
@@ -35,8 +39,15 @@ const Table = () => {
 		retry: 1,
 	});
 
+	useEffect(() => {
+		if (user.data.type === 'admin') {
+			setPath('admin/users');
+		} else {
+			setPath('companie');
+		}
+	}, [user]);
 
-	const data = useMemo(() => user, [user]);
+	const data = useMemo(() => userS, [userS]);
 	const columns = useMemo(() => column, []);
 
 	const table = useReactTable({
@@ -48,7 +59,8 @@ const Table = () => {
 
 	const { getHeaderGroups, getRowModel } = table;
 
-	if (user.length === 0 || userInfoQuery.isError) return <div>Loading...</div>;
+	if ((userS.length === 0 || userInfoQuery.isError) && !user)
+		return <div>Loading table...</div>;
 
 	return (
 		<div>
@@ -77,21 +89,30 @@ const Table = () => {
 										))}
 									</thead>
 									<tbody className="mb-2 text-sm">
-										{getRowModel().rows.map((row) => (
-											<tr key={row.id}>
-												{row.getVisibleCells().map((cell) => (
-													<td
-														key={cell.id}
-														className="w-36 whitespace-nowrap p-2 pb-6 text-center"
-													>
-														{flexRender(
-															cell.column.columnDef.cell,
-															cell.getContext(),
-														)}
-													</td>
-												))}
-											</tr>
-										))}
+										{getRowModel().rows.map((row) => {
+											const { id } = row.original;
+											return (
+												<NavLink to={`/${path}/${id}`} key={row.id}>
+													<tr key={row.id}>
+														{row.getVisibleCells().map((cell) => {
+															() => console.log(row.getValue(cell.column.id));
+
+															return (
+																<td
+																	key={cell.id}
+																	className="w-36 whitespace-nowrap p-2 pb-6 text-center"
+																>
+																	{flexRender(
+																		cell.column.columnDef.cell,
+																		cell.getContext(),
+																	)}
+																</td>
+															);
+														})}
+													</tr>
+												</NavLink>
+											);
+										})}
 									</tbody>
 								</table>
 								{/* buttons for pagination to got to next page and previous page and also last page and first page   */}

@@ -40,3 +40,16 @@ export async function getAllUserInfo() {
 
 	return data;
 }
+
+export async function getUserById(props: { id?: string }) {
+	const res = await fetch(`http://localhost:3000/users/${props.id}`, {
+		method: 'GET',
+		credentials: 'include',
+	});
+
+	if (!res.ok) return Promise.reject(`${res.statusText}`);
+
+	const data = await res.json();
+
+	return data;
+}

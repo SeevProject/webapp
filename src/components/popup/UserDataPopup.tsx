@@ -1,21 +1,58 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import { MdPersonSearch } from "react-icons/md";
+import { Dialog, Transition } from '@headlessui/react';
+import { useQuery } from '@tanstack/react-query';
+import { Fragment, useState, useEffect } from 'react';
+import { MdPersonSearch } from 'react-icons/md';
+import { getUserById } from '../../data/queries';
 
-export default function UserDataPopup() {
+export default function UserDataPopup(props: { id?: string }) {
+	const id = props.id;
+	const [user, setUser] = useState(null);
 	let [isOpen, setIsOpen] = useState(false);
+
+	// get user info
+	const userInfoQuery = useQuery({
+		queryKey: ['userInfoById', id],
+		queryFn: () => getUserById({ id: id }),
+		onSuccess: (data) => {
+			setUser(data.data);
+			setIsOpen(true);
+		},
+		onError: (error) => {
+			console.log(error);
+		},
+		retry: 1
+	});
+
+	// console.log(user);
+
 
 	function closeModal() {
 		setIsOpen(false);
 	}
 
-	function openModal() {
-		setIsOpen(true);
+	// function openModal() {
+	// 	setIsOpen(true);
+	// }
+
+	useEffect(() => {
+		if (user) {
+			setIsOpen(true);
+		}
+	}, [user]);
+
+	if (!user) {
+		return null;
 	}
+
+	if (userInfoQuery.isLoading) {
+		return <p>Loading... user data pop</p>;
+	}
+
+	const { username } = user;
 
 	return (
 		<>
-			<div className=" flex items-center justify-center">
+			{/* <div className=" flex items-center justify-center">
 				<button
 					type="button"
 					onClick={openModal}
@@ -23,10 +60,10 @@ export default function UserDataPopup() {
 				>
 					Open popup
 				</button>
-			</div>
+			</div> */}
 
 			<Transition appear show={isOpen} as={Fragment}>
-				<Dialog as="div" className="relative z-10" onClose={closeModal}>
+				<Dialog as="div" className="relative z-10  " onClose={closeModal}>
 					<Transition.Child
 						as={Fragment}
 						enter="ease-out duration-300"
@@ -40,7 +77,7 @@ export default function UserDataPopup() {
 					</Transition.Child>
 
 					<div className="fixed inset-0 overflow-y-auto">
-						<div className="flex min-h-full items-center justify-center p-4 text-center">
+						<div className="flex min-h-full items-center justify-center p-4 text-center ">
 							<Transition.Child
 								as={Fragment}
 								enter="ease-out duration-300"
@@ -50,14 +87,14 @@ export default function UserDataPopup() {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="bg-white h-[33rem] max-w-[32rem] transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-[0px_9px_15px_2px_#00000024] transition-all">
-									<div className="flex items-center justify-between">
+								<Dialog.Panel className="bg-white h-[33rem] max-w-[32rem] transform overflow-hidden rounded-2xl bg-background p-6 text-left align-middle shadow-[0px_9px_15px_2px_#00000024] transition-all">
+									<div className="flex items-center justify-between ">
 										<MdPersonSearch
 											className="h-20 w-24 rounded-full"
-											style={{ color: "#FC991C" }}
+											style={{ color: '#FC991C' }}
 										/>
 										<div className=" mr-1 w-[23rem] pb-2 pl-3">
-											<h1 className=" text-xl font-semibold">John B. Smith</h1>
+											<h1 className=" text-xl font-semibold">{username}</h1>
 											<p className="text-xs">
 												A motivated worker. doing blah blah blah and everything
 												else

@@ -46,12 +46,6 @@ export function Nav() {
 						menuItemsPoition={'-left-[25px]'}
 						customItemsComponent={<CustomItemsCom />}
 					/>
-				) : location.pathname.startsWith('/companie') ? (
-					<ProfileDropdown
-						notLoggedIn={false}
-						menuItemsPoition={'-left-[35px]'}
-						customItemsComponent={<CustomItemsCom />}
-					/>
 				) : location.pathname.startsWith('/admin') ? (
 					<>
 						<div className="flex flex-row overflow-hidden rounded-full border border-border bg-box">
@@ -84,11 +78,9 @@ export function Nav() {
 									</Menu.Item>
 								</>
 							}
-						/>{' '}
+						/>
 					</>
-				) : (
-					''
-				)}
+				) : ('')}
 			</div>
 		</div>
 	);

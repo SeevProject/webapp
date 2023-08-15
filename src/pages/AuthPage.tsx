@@ -1,9 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-	tryLogin,
-	tryLoginWithGoogle,
-	tryLogout
-} from '../data/mutations';
+import { tryLogin, tryLoginWithGoogle, tryLogout } from '../data/mutations';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button/Button';
 import { TbLogin } from 'react-icons/tb';
@@ -22,6 +18,7 @@ export function AuthPage() {
 		username: '',
 		password: '',
 	});
+
 	// do login and logout mutations to server
 	const loginWithGoogleMutation = useMutation({
 		mutationKey: ['login'],
@@ -81,6 +78,13 @@ export function AuthPage() {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	//  useEffect(() => {
+	// 		if (userInfoQuery.isSuccess && userInfoQuery.data) {
+	// 			setUser(userInfoQuery.data);
+	// 		}
+	// 	}, [userInfoQuery.isSuccess, userInfoQuery.data, setUser]);
+
+
 	if (user?.data) {
 		if (user?.data.type === 'admin') {
 			return <Navigate replace to={'/admin'} />;
@@ -88,6 +92,9 @@ export function AuthPage() {
 			return <Navigate replace to={'/companie'} />;
 		}
 	}
+
+	if (userInfoQuery.isLoading && userInfoQuery.isError)
+		return <p className="text-gray-500">Loading auth</p>;
 
 	return (
 		<>
@@ -117,12 +124,10 @@ export function AuthPage() {
 				<div className="grid-item pr-14 pt-8 text-end">
 					<ProfileDropdown />
 				</div>
-
 				<div className="ml-[10rem] mt-[7rem] w-min ">
 					{/* on loading */}
-					{userInfoQuery.status === 'loading' && (
-						<p className="text-gray-500">Loading</p>
-					)}
+					{userInfoQuery.isLoading && <p className="text-gray-500">Loading</p>}
+
 					<h1 className="mb-6 text-3xl font-bold">Login with your account</h1>
 					<p className="inline-block w-[15rem] text-start font-thin text-textAlt">
 						If you do not already have an account. You should
@@ -166,7 +171,6 @@ export function AuthPage() {
 								handleClick={() => loginWithGoogleMutation.mutate()}
 							/>
 						</div>
-						
 					</form>
 
 					{/* on errors */}
@@ -183,11 +187,3 @@ export function AuthPage() {
 		</>
 	);
 }
-
-// 	mutationKey: ['login'],
-// 	mutationFn: tryLogin,
-// 	onSuccess: () => {
-// 		// Trigger userInfoQuery after loginMutation is successful
-// 		userInfoQuery.refetch();
-// 	},
-// });
